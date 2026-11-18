@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -89,5 +90,75 @@ class SubjectServiceTest {
         when(repository.findAll()).thenReturn(List.of());
 
         assertThat(service.findAll()).isEmpty();
+    }
+
+    @Test
+    void update_ChangesNameAndTrimsWhitespace() {
+        // Given
+        Subject subject = new Subject("Mathe");
+        when(repository.findById(1L)).thenReturn(Optional.of(subject));
+        when(repository.save(subject)).thenReturn(subject);
+
+        // When
+        SubjectResponse response = service.update(1L, new CreateSubjectRequest("  Deutsch  "));
+
+        // Then
+        assertThat(response.name()).isEqualTo("Deutsch");
+        verify(repository).save(subject);
+    }
+
+    @Test
+    void update_ThrowsNotFound_WhenIdDoesNotExist() {
+        // Given
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThatThrownBy(() -> service.update(1L, new CreateSubjectRequest("Deutsch")))
+                .isInstanceOfSatisfying(ResponseStatusException.class,
+                        e -> assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND));
+
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    void update_ThrowsConflict_WhenNameExistsOnOtherSubject() {
+        // Given
+        when(repository.findById(1L)).thenReturn(Optional.of(new Subject("Mathe")));
+        when(repository.existsByNameIgnoreCaseAndIdNot("Deutsch", 1L)).thenReturn(true);
+
+        // When
+        // Then
+        assertThatThrownBy(() -> service.update(1L, new CreateSubjectRequest("Deutsch")))
+                .isInstanceOfSatisfying(ResponseStatusException.class,
+                        e -> assertThat(e.getStatusCode()).isEqualTo(HttpStatus.CONFLICT));
+
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    void delete_DeletesSubject_WhenIdExists() {
+        // Given
+        when(repository.existsById(1L)).thenReturn(true);
+
+        // When
+        service.delete(1L);
+
+        // Then
+        verify(repository).deleteById(1L);
+    }
+
+    @Test
+    void delete_ThrowsNotFound_WhenIdDoesNotExist() {
+        // Given
+        when(repository.existsById(1L)).thenReturn(false);
+
+        // When
+        // Then
+        assertThatThrownBy(() -> service.delete(1L))
+                .isInstanceOfSatisfying(ResponseStatusException.class,
+                        e -> assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND));
+
+        verify(repository, never()).deleteById(any());
     }
 }

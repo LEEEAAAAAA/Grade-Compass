@@ -7,3 +7,9 @@ SubjectRepositoryTest = Repository Test -> @DataJpaTest konfiguriert nur die JPA
 SubjectIntegrationTest = Int Test ->  @SpringBootTest + @AutoConfigureMockMvc lädt den gesamten Anwendungskontext (Controller → Service → Repository → DB), nichts ist gemockt. Testet  den kompletten Weg von HTTP-Request bis zur Datenbank.
 GradeCompassApplicationTests = Int Test -> @SpringBootTest ohne weitere Einschränkung — lädt den vollen Kontext nur um zu prüfen, ob die App überhaupt startet (contextLoads()).
 
+2.2:
+![Test Coverage](test_coverage.png)
+2.3
+Nicht testete methoden: 
+Subject Service: delete(), update()
+Subject Controller: delete(), update()

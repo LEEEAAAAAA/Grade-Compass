@@ -2,6 +2,8 @@ package ch.bbzw.m324.grade_compass.grade;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -60,5 +62,39 @@ class GradeServiceTest {
         when(repository.findAll()).thenReturn(List.of());
 
         assertThat(service.findAll()).isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {1.0, 6.0})
+    void create_AcceptsGrade_WhenValueIsOnBoundary(double value) {
+        when(repository.save(any(Grade.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        GradeResponse response = service.create(new CreateGradeRequest(1L, value));
+
+        assertThat(response.value()).isEqualTo(value);
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {0.99, 6.01})
+    void create_RejectsGrade_WhenValueIsOutsideRange(double value) {
+        assertThatThrownBy(() -> service.create(new CreateGradeRequest(1L, value)))
+                .isInstanceOf(ResponseStatusException.class);
+    }
+
+    @Test
+    void create_RoundsGradeToTwoDecimals() {
+        when(repository.save(any(Grade.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        GradeResponse response = service.create(new CreateGradeRequest(1L, 4.567));
+
+        assertThat(response.value()).isEqualTo(4.57);
+    }
+
+    @Test
+    void create_PropagatesException_WhenRepositoryFails() {
+        when(repository.save(any(Grade.class))).thenThrow(new RuntimeException("DB nicht erreichbar"));
+
+        assertThatThrownBy(() -> service.create(new CreateGradeRequest(1L, 4.0)))
+                .isInstanceOf(RuntimeException.class);
     }
 }

@@ -1,4 +1,8 @@
-package ch.bbzw.m324.grade_compass.subject;
+package ch.bbzw.m324.grade_compass.api.controllers;
+
+import ch.bbzw.m324.grade_compass.api.CreateSubjectRequest;
+import ch.bbzw.m324.grade_compass.api.SubjectResponse;
+import ch.bbzw.m324.grade_compass.core.SubjectService;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

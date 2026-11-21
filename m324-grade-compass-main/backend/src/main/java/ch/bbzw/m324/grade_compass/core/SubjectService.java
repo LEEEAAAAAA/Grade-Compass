@@ -1,4 +1,9 @@
-package ch.bbzw.m324.grade_compass.subject;
+package ch.bbzw.m324.grade_compass.core;
+
+import ch.bbzw.m324.grade_compass.api.CreateSubjectRequest;
+import ch.bbzw.m324.grade_compass.api.SubjectResponse;
+import ch.bbzw.m324.grade_compass.data.Subject;
+import ch.bbzw.m324.grade_compass.data.SubjectRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

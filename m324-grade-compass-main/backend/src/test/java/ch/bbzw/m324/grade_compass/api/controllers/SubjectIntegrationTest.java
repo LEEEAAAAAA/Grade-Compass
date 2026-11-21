@@ -1,4 +1,6 @@
-package ch.bbzw.m324.grade_compass.subject;
+package ch.bbzw.m324.grade_compass.api.controllers;
+
+import ch.bbzw.m324.grade_compass.data.SubjectRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

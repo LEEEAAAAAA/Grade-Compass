@@ -1,4 +1,9 @@
-package ch.bbzw.m324.grade_compass.grade;
+package ch.bbzw.m324.grade_compass.core;
+
+import ch.bbzw.m324.grade_compass.api.CreateGradeRequest;
+import ch.bbzw.m324.grade_compass.api.GradeResponse;
+import ch.bbzw.m324.grade_compass.data.Grade;
+import ch.bbzw.m324.grade_compass.data.GradeRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

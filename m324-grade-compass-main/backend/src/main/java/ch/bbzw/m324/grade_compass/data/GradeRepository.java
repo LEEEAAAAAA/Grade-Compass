@@ -1,4 +1,4 @@
-package ch.bbzw.m324.grade_compass.grade;
+package ch.bbzw.m324.grade_compass.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package ch.bbzw.m324.grade_compass.subject;
+package ch.bbzw.m324.grade_compass.data;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

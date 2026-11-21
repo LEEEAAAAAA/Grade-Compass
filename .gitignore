@@ -1,0 +1,38 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs / editors
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# SonarQube / SonarScanner
+.sonar/
+.scannerwork/
+
+# Build output
+target/
+dist/
+build/
+out/
+.angular/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
